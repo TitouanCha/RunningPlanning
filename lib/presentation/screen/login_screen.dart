@@ -57,8 +57,23 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Text(
+                      'Bienvenue sur Running Planning !!!',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blueAccent,
+                      ),
+                    ),
+                    Text(
+                      'Pour commencer connecter vous a votre compte',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
                     const SizedBox(height: 48),
                     TextFormField(
                       controller: _userNameController,
