@@ -55,12 +55,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   final List<Widget> _pages = [
-    const Center(child: Text('Planning')),
-    const Center(child: Text('Profil')),
     const Center(child: Text('Entrainement')),
+    const PlanningScreen(),
+    const Center(child: Text('Profil')),
   ];
 
   @override
