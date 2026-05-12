@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 32),
 
                       FilledButton(
-                        onPressed: (){
+                        onPressed: () {
                           context.read<AuthBloc>().add(
                             Login(
                               username: _userNameController.text.trim(),
@@ -132,7 +132,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: Text('Se connecter'),
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'Se connecter',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
