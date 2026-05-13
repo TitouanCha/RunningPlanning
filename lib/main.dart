@@ -4,14 +4,14 @@ import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:intl/date_symbol_data_local.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/use_cases/auth/auth_use_case.dart';
 import 'injection_container.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('fr_FR', null);
   await init();
   runApp(const MyApp());
 }
@@ -19,22 +19,17 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => sl<AuthBloc>(),
-        ),
-      ],
+      providers: [BlocProvider(create: (context) => sl<AuthBloc>())],
       child: MaterialApp(
         title: 'Training App',
         debugShowCheckedModeBanner: false,
         initialRoute: '/auth',
         routes: {
-            '/auth': (context) => const LoginScreen(),
-            '/home': (context) => const HomeScreen(),
+          '/auth': (context) => const LoginScreen(),
+          '/home': (context) => const HomeScreen(),
         },
         themeMode: ThemeMode.system,
         theme: ThemeData(
@@ -74,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     const Center(child: Text('Entrainement')),
-    const PlanningScreen(),
+    PlanningScreen(),
     const Center(child: Text('Profil')),
   ];
 
@@ -82,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Planning')),
-      body: _pages[_currentIndex],
+      body: SafeArea(child: _pages[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),
@@ -116,4 +111,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
