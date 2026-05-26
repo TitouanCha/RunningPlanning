@@ -13,7 +13,8 @@ class AuthDatasourceImpl implements AuthDataSource {
   @override
   Future<LoggedUser> login(AuthModel authModel) async {
     final response = await _client.dio.post('/auth/login', data: {
-        authModel
+      'name': authModel.name,
+      'password': authModel.password,
     });
     LoggedUser user = LoggedUser.fromApi(response.data);
     return user;
@@ -21,8 +22,9 @@ class AuthDatasourceImpl implements AuthDataSource {
 
   @override
   Future<LoggedUser> register(AuthModel authModel) async {
-    final response = await _client.dio.post('/auth/register', data: {
-      authModel
+    final response = await _client.dio.post('/auth', data: {
+      'name': authModel.name,
+      'password': authModel.password,
     });
     LoggedUser user = LoggedUser.fromApi(response.data);
     return user;

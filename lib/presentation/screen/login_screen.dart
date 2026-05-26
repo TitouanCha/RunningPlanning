@@ -34,14 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         },
         builder: (context, state) {
-          if (state.status == AuthStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state.status == AuthStatus.error) {
-            return Center(
-              child: Text(state.errorMessage ?? 'Erreur de connexion'),
-            );
-          }
           return SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -73,7 +65,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
-
+                      state.status == AuthStatus.error
+                          ? Text(
+                              state.errorMessage ?? 'Erreur lors de la connexion !!!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      const SizedBox(height: 4),
                       TextFormField(
                         controller: _userNameController,
                         keyboardType: TextInputType.text,
@@ -122,27 +124,30 @@ class _LoginScreenState extends State<LoginScreen> {
                             : null,
                       ),
                       const SizedBox(height: 32),
-
-                      FilledButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(
-                            Login(
-                              username: _userNameController.text.trim(),
-                              password: _passwordController.text,
+                      state.status == AuthStatus.loading
+                          ? const Center(child: CircularProgressIndicator())
+                          : FilledButton(
+                              onPressed: () {
+                                context.read<AuthBloc>().add(
+                                  Login(
+                                    username: _userNameController.text.trim(),
+                                    password: _passwordController.text,
+                                  ),
+                                );
+                              },
+                              style: FilledButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: Text(
+                                'Se connecter',
+                                style: TextStyle(fontSize: 16),
+                              ),
                             ),
-                          );
-                        },
-                        style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Text(
-                          'Se connecter',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
                     ],
                   ),
                 ),

@@ -33,7 +33,10 @@ class AuthRepositoryImpl implements AuthRepository {
       }
       return Left(ServerFailure(e.response?.statusCode ?? 0, e.message ?? ''));
     } catch (e) {
-      return Left(e.toString() as Failure);
+      if (e is Failure) {
+        return Left(e);
+      }
+      return Left(FetchFailure(e.toString()));
     }
   }
 
