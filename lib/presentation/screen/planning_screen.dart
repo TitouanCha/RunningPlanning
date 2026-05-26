@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
+
+import '../../domain/entities/calendar_day.dart';
 
 int getWeeksIntMonth(int year, int month) {
   DateTime firstDay = DateTime(year, month, 1);
@@ -48,84 +52,102 @@ class PlanningScreen extends StatelessWidget {
     final weekInMonth = getWeeksIntMonth(year, month);
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                shape: BoxShape.rectangle,
-              ),
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.arrow_back_ios),
-                        ),
-                        Text(
-                          monthName[month - 1],
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          year.toString(),
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.arrow_forward_ios),
-                        ),
-                      ],
-                    ),
+      body: BlocConsumer<PlanningBloc, PlanningState>(
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          if (state.status == PlanningStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status == PlanningStatus.error) {
+            return Center(child: Text("Erreur de chargement du planning : ${state.errorMsg}"));
+          }
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    shape: BoxShape.rectangle,
                   ),
-                  WeekDaysHeader(),
-                  WeeklyPlanning(firstDayOfWeek: firstDayOfWeek),
-                ],
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.arrow_back_ios),
+                            ),
+                            Text(
+                              monthName[month - 1],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              year.toString(),
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.arrow_forward_ios),
+                            ),
+                          ],
+                        ),
+                      ),
+                      WeekDaysHeader(),
+                      _WeeklyPlanning(planning: state.calendar),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class WeeklyPlanning extends StatelessWidget {
-  final DateTime firstDayOfWeek;
+class _WeeklyPlanning extends StatelessWidget {
+  final List<List<CalendarDay>> planning;
 
-  const WeeklyPlanning({super.key, required this.firstDayOfWeek});
+  const _WeeklyPlanning({super.key, required this.planning});
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> days = List.generate(7, (index) {
-      DateTime day = firstDayOfWeek.add(Duration(days: index));
-      return Padding(
-        padding: const EdgeInsets.all(0),
-        child: Container(
-          alignment: Alignment.center,
-          width: 50,
-          height: 50,
-          child: Text(day.day.toString()),
-        ),
-      );
-    });
 
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: days.map((day) => Expanded(child: day)).toList(),
+      children: planning.map((week) {
+        return Row(
+          children: week.map((day) {
+            return Container(
+              alignment: Alignment.center,
+              width: 50,
+              height: 50,
+              margin: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey[100],
+                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.rectangle,
+              ),
+              child: Text(day.day.day.toString()),
+            );
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 }

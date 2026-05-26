@@ -1,8 +1,7 @@
-
 import 'dart:core';
 import 'dart:ffi';
 
-import 'package:running_planning/domain/entities/user.dart';
+import 'package:running_planning/domain/entities/loggedUser.dart';
 import 'package:running_planning/domain/enums/race_type.dart';
 
 class Race {
@@ -10,12 +9,9 @@ class Race {
   final String name;
   final DateTime date;
   final RaceType type;
-  final Int distance;
+  final int distance;
   final String location;
   final String prepaId;
-  final String prepaName;
-  final String prepaStartDate;
-  final List<User> userList;
 
   Race({
     required this.id,
@@ -25,8 +21,17 @@ class Race {
     required this.distance,
     required this.location,
     required this.prepaId,
-    required this.prepaName,
-    required this.prepaStartDate,
-    required this.userList,
   });
+
+  factory Race.fromApi(Map<String, dynamic> json){
+    return Race(
+        id: json['_id'] as String? ?? 'Aucune données cahrgé',
+        name: json['name'] as String? ?? 'Aucune données cahrgé',
+        date: DateTime.parse(json['date'] as String? ?? '2004-12-16'),
+        type: json['type'] as RaceType? ?? RaceType.other,
+        distance: json['distance'] as int? ?? 0,
+        location: json['location'] as String? ?? 'Aucune données cahrgé',
+        prepaId: json['idPrepa'] as String? ?? 'Aucune données cahrgé'
+    );
+  }
 }

@@ -14,5 +14,9 @@ class UnauthorizedFailure extends Failure {
 }
 
 class NetworkFailure extends Failure {
-  NetworkFailure() : super('Aucune connexion Internet');
+  NetworkFailure(super.message);
+}
+
+class FetchFailure extends Failure{
+  FetchFailure(super.message);
 }

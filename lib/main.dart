@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
+import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,7 +23,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => sl<AuthBloc>())],
+      providers: [
+        BlocProvider(create: (context) => sl<AuthBloc>()),
+        BlocProvider(
+          create: (context) =>
+              sl<PlanningBloc>()..add(LoadCalendar(date: DateTime.now())),
+        ),
+      ],
       child: MaterialApp(
         title: 'Training App',
         debugShowCheckedModeBanner: false,

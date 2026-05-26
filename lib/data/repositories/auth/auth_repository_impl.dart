@@ -1,12 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:running_planning/core/storage/secure_storage.dart';
-import 'package:running_planning/domain/entities/user.dart';
+import 'package:running_planning/domain/entities/loggedUser.dart';
 
 import '../../../core/errors/failures.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../../models/auth_model.dart';
-import 'auth_datasource.dart';
+import 'auth_data_source.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource _dataSource;
@@ -15,11 +15,11 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._dataSource, this._secureStorage);
 
   @override
-  Future<Either<Failure, User>> auth(String name, String password) async {
+  Future<Either<Failure, LoggedUser>> auth(String name, String password) async {
     try {
       final authModel = AuthModel(name: name, password: password);
       final token = await _secureStorage.getToken();
-      late final User model;
+      late final LoggedUser model;
       if(token.isEmpty) {
         model = await _dataSource.register(authModel);
       }else {
