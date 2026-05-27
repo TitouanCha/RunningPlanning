@@ -47,18 +47,18 @@ class LoadMonthCalendarUseCase {
             )
             .toList();
         final List<Race> races = planning.race
-            .where((race) => race.date == currentDate)
+            .where((race) => race.date.day == currentDate.day)
             .toList();
         final List<TrainingStep> steps = planning.steps
             .where(
               (step) =>
-                  step.startDate.isBefore(currentDate) &&
+                  step.startDate.isBefore(currentDate.add(Duration(days: 1))) &&
                   step.endDate.isAfter(currentDate),
             )
             .toList();
         final List<Training> trainings = planning.training
             .where((training) =>
-              training.startDate.isBefore(currentDate) &&
+              training.startDate.isBefore(currentDate.add(Duration(days: 1))) &&
               training.endDate.isAfter(currentDate)
             ).toList();
         currentWeek.add(

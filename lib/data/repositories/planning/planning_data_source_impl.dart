@@ -1,6 +1,7 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:intl/intl.dart';
 import 'package:running_planning/core/network/dio_client.dart';
 import 'package:running_planning/data/repositories/planning/planning_data_source.dart';
 import 'package:running_planning/domain/entities/planning.dart';
@@ -14,13 +15,15 @@ class PlanningDataSourceImpl implements PlanningDataSource {
   @override
   Future<Planning> getPlanning(DateTime startDate, DateTime endDate, String userToken) async{
     try{
+      final String formattedStartDate = DateFormat('dd/MM/yyyy').format(startDate);
+      final String formattedEndDate = DateFormat('dd/MM/yyyy').format(endDate);
       final response = await _client.dio.get("/planning",
           options: Options(
             headers: {'Authorization' : 'Bearer $userToken'},
           ),
           queryParameters: {
-            'startDate' : startDate,
-            'endDate' : endDate
+            'startDate' : formattedStartDate,
+            'endDate' : formattedEndDate
           }
       );
       Planning planning = Planning.fromApi(response.data);

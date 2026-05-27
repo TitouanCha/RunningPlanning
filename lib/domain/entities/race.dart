@@ -28,7 +28,7 @@ class Race {
         id: json['_id'] as String? ?? 'Aucune données cahrgé',
         name: json['name'] as String? ?? 'Aucune données cahrgé',
         date: DateTime.parse(json['date'] as String? ?? '2004-12-16'),
-        type: json['type'] as RaceType? ?? RaceType.other,
+        type: RaceType.fromString(json['type'] as String? ?? 'other'),
         distance: json['distance'] as int? ?? 0,
         location: json['location'] as String? ?? 'Aucune données cahrgé',
         prepaId: json['idPrepa'] as String? ?? 'Aucune données cahrgé'

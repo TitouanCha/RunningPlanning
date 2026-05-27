@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:running_planning/domain/entities/prepa.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 
 import '../../domain/entities/calendar_day.dart';
+import '../widget/planning_widget/weekly_calendar_widget.dart';
 
 int getWeeksIntMonth(int year, int month) {
   DateTime firstDay = DateTime(year, month, 1);
@@ -106,8 +108,7 @@ class PlanningScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      WeekDaysHeader(),
-                      _WeeklyPlanning(planning: state.calendar),
+                      WeeklyPlanning(planning: state.calendar),
                     ],
                   ),
                 ),
@@ -120,59 +121,19 @@ class PlanningScreen extends StatelessWidget {
   }
 }
 
-class _WeeklyPlanning extends StatelessWidget {
-  final List<List<CalendarDay>> planning;
+class _DailyProgramWidget extends StatelessWidget {
+  final CalendarDay day;
 
-  const _WeeklyPlanning({super.key, required this.planning});
+  const _DailyProgramWidget({required this.day});
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: planning.map((week) {
-        return Row(
-          children: week.map((day) {
-            return Container(
-              alignment: Alignment.center,
-              width: 50,
-              height: 50,
-              margin: EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[100],
-                borderRadius: BorderRadius.circular(10),
-                shape: BoxShape.rectangle,
-              ),
-              child: Text(day.day.day.toString()),
-            );
-          }).toList(),
-        );
-      }).toList(),
+      children: [
+
+      ],
     );
   }
 }
 
-class WeekDaysHeader extends StatelessWidget {
-  const WeekDaysHeader({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    const days = ["L", "Ma", "Me", "J", "V", "S", "D"];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: days.map((day) {
-        return Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              width: 50,
-              height: 20,
-              child: Text(day, style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-          ],
-        );
-      }).toList(),
-    );
-  }
-}
