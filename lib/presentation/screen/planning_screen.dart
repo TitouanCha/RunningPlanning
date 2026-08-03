@@ -5,6 +5,7 @@ import 'package:running_planning/domain/entities/prepa.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 
 import '../../domain/entities/calendar_day.dart';
+import '../widget/planning_widget/day_detail_widget.dart';
 import '../widget/planning_widget/weekly_calendar_widget.dart';
 
 int getWeeksIntMonth(int year, int month) {
@@ -113,6 +114,7 @@ class PlanningScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              DayDetailWidget(dailyProgram: state.dailyProgram)
             ],
           );
         },
@@ -121,19 +123,5 @@ class PlanningScreen extends StatelessWidget {
   }
 }
 
-class _DailyProgramWidget extends StatelessWidget {
-  final CalendarDay day;
-
-  const _DailyProgramWidget({required this.day});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-
-      ],
-    );
-  }
-}
 
 

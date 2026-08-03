@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:running_planning/domain/entities/calendar_day.dart';
 
 bool isSameDay(DateTime a, DateTime b) {
@@ -42,7 +43,12 @@ class CalendarDayWidget extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+          padding: EdgeInsets.only(
+            top: 3,
+            bottom: 3,
+            left: isLeftPrepa ? 2 : 0,
+            right: isRightPrepa ? 2 : 0
+          ),
           child: Container(
             decoration: BoxDecoration(
               color: day.prepas.isNotEmpty
@@ -79,25 +85,20 @@ class CalendarDayWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(day.day.day.toString()),
+                    if(day.races.isNotEmpty)
+                      SvgPicture.asset(
+                        "assets/icons/cup.svg"
+                      )
+                    else Text(day.day.day.toString()),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (day.races.isNotEmpty)
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
                         if (day.trainings.isNotEmpty)
                           Container(
                             width: 6,
                             height: 6,
                             decoration: const BoxDecoration(
-                              color: Colors.green,
+                              color: Colors.red,
                               shape: BoxShape.circle,
                             ),
                           ),

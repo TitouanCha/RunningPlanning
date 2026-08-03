@@ -28,10 +28,7 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
     SwitchMonth event,
     Emitter<PlanningState> emit,
   ) async {
-    await _onLoadCalendar(
-      LoadCalendar(date: event.month),
-      emit,
-    );
+    await _onLoadCalendar(LoadCalendar(date: event.month), emit);
   }
 
   Future<void> _onSelectDay(
@@ -39,17 +36,11 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
     Emitter<PlanningState> emit,
   ) async {
     try {
-      final dailyProgram = await getPlanningUseCase.getPlanning(
-        event.day,
-        event.day,
-      );
-      dailyProgram.fold(
-        (_) => emit(state.copyWith(status: PlanningStatus.error)),
-        (dailyProgram) => emit(
-          state.copyWith(
-            status: PlanningStatus.loaded,
-            dailyProgram: dailyProgram,
-          ),
+      final dailyProgram = await _loadDailyProgram(event.day);
+      emit(
+        state.copyWith(
+          status: PlanningStatus.loaded,
+          dailyProgram: dailyProgram,
         ),
       );
     } catch (_) {
@@ -61,17 +52,42 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
     LoadCalendar event,
     Emitter<PlanningState> emit,
   ) async {
+    final today = DateTime.now();
     emit(state.copyWith(status: PlanningStatus.loading));
     try {
-      final calendar = await loadCalendarUseCase.loadPlanning(event.date);
-      calendar.fold(
-            (failure) => emit(state.copyWith(status: PlanningStatus.error, errorMsg: failure.message.toString())),
-            (calendar) => emit(
-          state.copyWith(status: PlanningStatus.loaded, calendar: calendar),
+      final result = await loadCalendarUseCase.loadPlanning(event.date);
+      if (result.isLeft()) {
+        final failure = result.swap().getOrElse(() => throw Exception());
+        emit(
+          state.copyWith(
+            status: PlanningStatus.error,
+            errorMsg: failure.message,
+          ),
+        );
+        return;
+      }
+      final calendar = result.getOrElse(() => []);
+      final dailyProgram = await _loadDailyProgram(today);
+      emit(
+        state.copyWith(
+          status: PlanningStatus.loaded,
+          calendar: calendar,
+          dailyProgram: dailyProgram,
         ),
       );
     } catch (e) {
-      emit(state.copyWith(status: PlanningStatus.error, errorMsg: e.toString()));
+      emit(
+        state.copyWith(status: PlanningStatus.error, errorMsg: e.toString()),
+      );
     }
+  }
+
+  Future<Planning> _loadDailyProgram(DateTime day) async {
+    final dailyProgram = await getPlanningUseCase.getPlanning(day, day);
+
+    return dailyProgram.fold(
+      (_) => Planning(prepa: [], steps: [], training: [], race: []),
+      (data) => data,
+    );
   }
 }

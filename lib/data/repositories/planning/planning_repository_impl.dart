@@ -22,7 +22,7 @@ class PlanningRepositoryImpl extends PlanningRepository {
   ) async {
     try {
       final userToken = await _secureStorage.getToken();
-      final planning = await _dataSource.getPlanning(
+      final Planning planning = await _dataSource.getPlanning(
         startDate,
         endDate,
         userToken,

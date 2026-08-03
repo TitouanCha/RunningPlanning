@@ -20,11 +20,9 @@ class AuthRepositoryImpl implements AuthRepository {
       final authModel = AuthModel(name: name, password: password);
       final token = await _secureStorage.getToken();
       late final LoggedUser model;
-      if(token.isEmpty) {
-        model = await _dataSource.register(authModel);
-      }else {
-        model = await _dataSource.login(authModel);
-      }
+
+      model = await _dataSource.login(authModel);
+
       await _secureStorage.saveToken(model.token);
       return Right(model);
     } on DioException catch (e) {
