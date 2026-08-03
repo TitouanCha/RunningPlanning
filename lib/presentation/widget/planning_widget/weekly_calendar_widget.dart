@@ -6,8 +6,15 @@ import '../../../domain/entities/calendar_day.dart';
 
 class WeeklyPlanning extends StatelessWidget {
   final List<List<CalendarDay>> planning;
+  final Function(CalendarDay) onDaySelected;
+  final DateTime selectedDay;
 
-  const WeeklyPlanning({super.key, required this.planning});
+  const WeeklyPlanning({
+    super.key,
+    required this.planning,
+    required this.onDaySelected,
+    required this.selectedDay,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,12 @@ class WeeklyPlanning extends StatelessWidget {
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: week.asMap().entries.map((entry) {
-              return CalendarDayWidget(day: entry.value, index: entry.key);
+              return CalendarDayWidget(
+                calendarDay: entry.value,
+                index: entry.key,
+                onPressed: onDaySelected,
+                selectedDay: selectedDay,
+              );
             }).toList(),
           );
         }),

@@ -64,64 +64,75 @@ class PlanningScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state.status == PlanningStatus.error) {
-            return Center(child: Text("Erreur de chargement du planning : ${state.errorMsg}"));
+            return Center(
+              child: Text(
+                "Erreur de chargement du planning : ${state.errorMsg}",
+              ),
+            );
           }
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    shape: BoxShape.rectangle,
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.arrow_back_ios),
-                            ),
-                            Text(
-                              monthName[month - 1],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      shape: BoxShape.rectangle,
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.arrow_back_ios),
                               ),
-                            ),
-                            Text(
-                              year.toString(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                              Text(
+                                monthName[month - 1],
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.arrow_forward_ios),
-                            ),
-                          ],
+                              Text(
+                                year.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.arrow_forward_ios),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      WeeklyPlanning(planning: state.calendar),
-                    ],
+                        WeeklyPlanning(
+                          planning: state.calendar,
+                          selectedDay: state.selectedDate,
+                          onDaySelected: (CalendarDay day) {
+                            context.read<PlanningBloc>().add(
+                              SelectDay(day: day.day),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              DayDetailWidget(dailyProgram: state.dailyProgram)
-            ],
+                DayDetailWidget(dailyProgram: state.dailyProgram),
+              ],
+            ),
           );
         },
       ),
     );
   }
 }
-
-
-

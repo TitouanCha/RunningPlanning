@@ -8,103 +8,113 @@ bool isSameDay(DateTime a, DateTime b) {
 }
 
 class CalendarDayWidget extends StatelessWidget {
-  final CalendarDay day;
+  final CalendarDay calendarDay;
   final int index;
+  final Function(CalendarDay) onPressed;
+  final DateTime selectedDay;
 
-  const CalendarDayWidget({super.key, required this.day, required this.index});
+  const CalendarDayWidget({super.key, required this.calendarDay, required this.index, required this.onPressed, required this.selectedDay});
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now().day;
-    final month = DateTime.now().month;
 
-    final prepa = day.prepas.isNotEmpty ? day.prepas.first : null;
+    final prepa = calendarDay.prepas.isNotEmpty ? calendarDay.prepas.first : null;
     final isLeftPrepa =
-        prepa != null && (isSameDay(prepa.startDate, day.day) || index == 0);
+        prepa != null && (isSameDay(prepa.startDate, calendarDay.day) || index == 0);
     final isRightPrepa =
-        prepa != null && (isSameDay(prepa.endDate, day.day) || index == 6);
+        prepa != null && (isSameDay(prepa.endDate, calendarDay.day) || index == 6);
 
-    final steps = day.steps.isNotEmpty ? day.steps.first : null;
+    final steps = calendarDay.steps.isNotEmpty ? calendarDay.steps.first : null;
     final isLeftSteps =
-        steps != null && (isSameDay(steps.startDate, day.day) || index == 0);
+        steps != null && (isSameDay(steps.startDate, calendarDay.day) || index == 0);
     final isRightSteps =
-        steps != null && (isSameDay(steps.endDate, day.day) || index == 6);
+        steps != null && (isSameDay(steps.endDate, calendarDay.day) || index == 6);
 
     return Padding(
       padding: const EdgeInsets.all(0),
-      child: Container(
-        alignment: Alignment.center,
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: day.day.day == today && day.day.month == month
-              ? Theme.of(context).colorScheme.primaryContainer
-              : Colors.transparent,
-          shape: BoxShape.circle,
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 3,
-            bottom: 3,
-            left: isLeftPrepa ? 2 : 0,
-            right: isRightPrepa ? 2 : 0
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: day.prepas.isNotEmpty
-                  ? Color(0xFF64B5F6)
-                  : Colors.transparent,
-              borderRadius: BorderRadius.only(
-                topLeft: isLeftPrepa ? Radius.circular(25) : Radius.zero,
-                topRight: isRightPrepa ? Radius.circular(25) : Radius.zero,
-                bottomLeft: isLeftPrepa ? Radius.circular(25) : Radius.zero,
-                bottomRight: isRightPrepa ? Radius.circular(25) : Radius.zero,
-              ),
+      child: GestureDetector(
+        onTap: () => onPressed(calendarDay),
+        child: Container(
+          alignment: Alignment.center,
+          width: 50,
+          height: 50,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: 3,
+              bottom: 3,
+              left: isLeftPrepa ? 2 : 0,
+              right: isRightPrepa ? 2 : 0
             ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: isLeftSteps ? 5 : 0,
-                right: isRightSteps ? 5 : 0,
-                top: 5,
-                bottom: 5,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: day.steps.isNotEmpty
-                      ? Color(0xFFFFF176)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.only(
-                    topLeft: isLeftSteps ? Radius.circular(25) : Radius.zero,
-                    topRight: isRightSteps ? Radius.circular(25) : Radius.zero,
-                    bottomLeft: isLeftSteps ? Radius.circular(25) : Radius.zero,
-                    bottomRight: isRightSteps
-                        ? Radius.circular(25)
-                        : Radius.zero,
-                  ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: calendarDay.prepas.isNotEmpty
+                    ? Color(0xFF64B5F6)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.only(
+                  topLeft: isLeftPrepa ? Radius.circular(25) : Radius.zero,
+                  topRight: isRightPrepa ? Radius.circular(25) : Radius.zero,
+                  bottomLeft: isLeftPrepa ? Radius.circular(25) : Radius.zero,
+                  bottomRight: isRightPrepa ? Radius.circular(25) : Radius.zero,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(day.races.isNotEmpty)
-                      SvgPicture.asset(
-                        "assets/icons/cup.svg"
-                      )
-                    else Text(day.day.day.toString()),
-                    Row(
+              ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: isLeftSteps ? 5 : 0,
+                  right: isRightSteps ? 5 : 0,
+                  top: 5,
+                  bottom: 5,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: calendarDay.steps.isNotEmpty
+                        ? Color(0xFFFFF176)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.only(
+                      topLeft: isLeftSteps ? Radius.circular(25) : Radius.zero,
+                      topRight: isRightSteps ? Radius.circular(25) : Radius.zero,
+                      bottomLeft: isLeftSteps ? Radius.circular(25) : Radius.zero,
+                      bottomRight: isRightSteps
+                          ? Radius.circular(25)
+                          : Radius.zero,
+                    ),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: isSameDay(selectedDay, calendarDay.day)
+                          ? Colors.white
+                          : Colors.transparent,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (day.trainings.isNotEmpty)
-                          Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
+                        if(calendarDay.races.isNotEmpty)
+                          SvgPicture.asset(
+                            "assets/icons/cup.svg"
+                          )
+                        else Text(calendarDay.day.day.toString(),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (calendarDay.trainings.isNotEmpty)
+                              Container(
+                                width: 6,
+                                height: 6,
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

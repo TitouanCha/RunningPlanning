@@ -40,6 +40,7 @@ class PlanningBloc extends Bloc<PlanningEvent, PlanningState> {
       emit(
         state.copyWith(
           status: PlanningStatus.loaded,
+          selectedDate: event.day,
           dailyProgram: dailyProgram,
         ),
       );
