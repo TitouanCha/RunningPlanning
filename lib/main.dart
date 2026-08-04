@@ -6,6 +6,8 @@ import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:running_planning/presentation/screen/race_screen.dart';
+import 'core/nav_enum.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/use_cases/auth/auth_use_case.dart';
 import 'injection_container.dart';
@@ -56,7 +58,13 @@ class MyApp extends StatelessWidget {
             onTertiaryContainer: const Color(0xFF424242),
           ),
           useMaterial3: true,
-          appBarTheme: const AppBarTheme(centerTitle: true),
+          appBarTheme: const AppBarTheme(
+            centerTitle: true,
+            scrolledUnderElevation: 4,
+            shadowColor: Colors.black26,
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
+          ),
         ),
         //home: const HomeScreen()
       ),
@@ -74,16 +82,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 1;
 
+  final List<NavEnum> _navItem = [
+    NavEnum.training,
+    NavEnum.planning,
+    NavEnum.races,
+  ];
+
   final List<Widget> _pages = [
     const Center(child: Text('Entrainement')),
     PlanningScreen(),
-    const Center(child: Text('Profil')),
+    RacesScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Planning')),
+      appBar: AppBar(title: Text(_navItem[_currentIndex].label)),
       body: SafeArea(child: _pages[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -107,11 +121,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              'assets/icons/profile.svg',
+              'assets/icons/cup.svg',
               width: 24,
               height: 24,
             ),
-            label: 'Profil',
+            label: 'Races',
           ),
         ],
       ),

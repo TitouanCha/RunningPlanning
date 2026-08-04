@@ -52,7 +52,6 @@ class PlanningScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weekInMonth = getWeeksIntMonth(year, month);
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       body: BlocConsumer<PlanningBloc, PlanningState>(
