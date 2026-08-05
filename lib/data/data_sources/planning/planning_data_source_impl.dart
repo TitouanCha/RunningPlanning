@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:running_planning/core/network/dio_client.dart';
-import 'package:running_planning/data/repositories/planning/planning_data_source.dart';
+import 'package:running_planning/data/data_sources/planning/planning_data_source.dart';
 import 'package:running_planning/domain/entities/planning.dart';
 
 import '../../../core/errors/failures.dart';

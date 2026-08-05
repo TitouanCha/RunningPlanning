@@ -3,11 +3,11 @@ import 'package:dio/dio.dart';
 
 import 'package:running_planning/core/errors/failures.dart';
 import 'package:running_planning/core/storage/secure_storage.dart';
-import 'package:running_planning/data/repositories/planning/planning_data_source.dart';
 
 import 'package:running_planning/domain/entities/planning.dart';
 
-import '../../../domain/repositories/planning_repository.dart';
+import '../../domain/repositories/planning_repository.dart';
+import '../data_sources/planning/planning_data_source.dart';
 
 class PlanningRepositoryImpl extends PlanningRepository {
   final PlanningDataSource _dataSource;

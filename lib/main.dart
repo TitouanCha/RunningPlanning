@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
+import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               sl<PlanningBloc>()..add(LoadCalendar(date: DateTime.now())),
         ),
+        BlocProvider(create: (context) => sl<UserRaceBloc>()..add(LoadUserRaces(isActiveRaces: true))),
       ],
       child: MaterialApp(
         title: 'Training App',

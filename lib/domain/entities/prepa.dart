@@ -1,4 +1,5 @@
 import 'package:running_planning/domain/entities/User.dart';
+import 'package:running_planning/domain/enums/race_type.dart';
 
 class Prepa {
   final String id;
@@ -6,7 +7,8 @@ class Prepa {
   final DateTime startDate;
   final DateTime endDate;
   final String raceName;
-  final String raceDate;
+  final DateTime raceDate;
+  final RaceType raceType;
   final String raceId;
   final List<User>? athletes;
 
@@ -17,6 +19,7 @@ class Prepa {
     required this.endDate,
     required this.raceName,
     required this.raceDate,
+    required this.raceType,
     required this.raceId,
     this.athletes,
   });
@@ -28,7 +31,11 @@ class Prepa {
       startDate: DateTime.parse(json['startDate'] as String? ?? '2004-12-16'),
       endDate: DateTime.parse(json['endDate'] as String? ?? '2004-12-16'),
       raceName: json['idRace']['name'] as String? ?? 'Aucune données cahrgé',
-      raceDate: json['idRace']['date'] as String? ?? 'Aucune données cahrgé',
+      raceDate: DateTime.parse(json['idRace']['date'] as String? ?? '2004-12-16'),
+      raceType: RaceType.values.firstWhere(
+        (e) => e.name.toLowerCase() == (json['idRace']['type'] as String? ?? '').toLowerCase(),
+        orElse: () => RaceType.other,
+      ),
       raceId: json['idRace']['_id'] as String? ?? 'Aucune données cahrgé',
       athletes: (json['userList'] as List<dynamic>?)
           ?.map((user) => User.fromApi(user as Map<String, dynamic>))

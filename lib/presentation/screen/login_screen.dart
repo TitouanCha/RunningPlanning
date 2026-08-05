@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:running_planning/core/storage/secure_storage.dart';
 
 import '../bloc/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final SecureStorage _secureStorage = SecureStorage();
   final _userNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isPasswordObscure = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
+  Future<void> _checkToken() async {
+    final token = await _secureStorage.getToken();
+    if (token.isNotEmpty && mounted) {
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
+  }
 
   @override
   void dispose() {
