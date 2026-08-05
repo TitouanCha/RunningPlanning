@@ -54,11 +54,16 @@ class RacesScreen extends StatelessWidget {
                       itemCount: state.userNextPrepa.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(state.userNextPrepa[index].raceName),
-                            subtitle: Text(
-                              state.userNextPrepa[index].raceDate.toString(),
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/PrepaDetail', arguments: state.userNextPrepa[index].id);
+                          },
+                          child: Card(
+                            child: ListTile(
+                              title: Text(state.userNextPrepa[index].raceName),
+                              subtitle: Text(
+                                state.userNextPrepa[index].raceDate.toString(),
+                              ),
                             ),
                           ),
                         );
@@ -108,11 +113,16 @@ class RacesScreen extends StatelessWidget {
                       itemCount: state.userPastPrepa.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(state.userPastPrepa[index].raceName),
-                            subtitle: Text(
-                              state.userPastPrepa[index].raceDate.toString(),
+                        return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/PrepaDetail', arguments: state.userPastPrepa[index].id);
+                            },
+                          child: Card(
+                            child: ListTile(
+                              title: Text(state.userPastPrepa[index].raceName),
+                              subtitle: Text(
+                                state.userPastPrepa[index].raceDate.toString(),
+                              ),
                             ),
                           ),
                         );

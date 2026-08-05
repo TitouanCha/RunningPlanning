@@ -28,10 +28,15 @@ class Race {
         id: json['_id'] as String? ?? 'Aucune données cahrgé',
         name: json['name'] as String? ?? 'Aucune données cahrgé',
         date: DateTime.parse(json['date'] as String? ?? '2004-12-16'),
-        type: RaceType.fromString(json['type'] as String? ?? 'other'),
+        type: RaceType.values.firstWhere(
+              (e) => e.name.toLowerCase() == (json['type'] as String? ?? '').toLowerCase(),
+          orElse: () => RaceType.other,
+        ),
         distance: json['distance'] as int? ?? 0,
-        location: json['location'] as String? ?? 'Aucune données cahrgé',
-        prepaId: json['idPrepa'] as String? ?? 'Aucune données cahrgé'
+        location: json['location'] as String? ?? 'Aucune données chargé',
+        prepaId: (json['idPrepa'] is Map)
+            ? (json['idPrepa']['_id'] as String? ?? 'Aucune données chargé')
+            : (json['idPrepa'] as String? ?? 'Aucune données chargé'),
     );
   }
 }
