@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
             ),
-            label: 'Entrainement',
+            label: 'Prepas',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
             ),
-            label: 'Races',
+            label: 'Courses',
           ),
         ],
       ),

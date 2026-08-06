@@ -13,3 +13,21 @@ class SelectTraining extends PrepaDetailEvent {
 
   SelectTraining(this.training);
 }
+
+class DeselectTraining extends PrepaDetailEvent {
+  final Training training;
+
+  DeselectTraining(this.training);
+}
+
+class JoinPrepa extends PrepaDetailEvent {
+  final String prepaId;
+
+  JoinPrepa({required this.prepaId});
+}
+
+class LeavePrepa extends PrepaDetailEvent {
+  final String prepaId;
+
+  LeavePrepa({required this.prepaId});
+}

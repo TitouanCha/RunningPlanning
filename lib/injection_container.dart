@@ -14,6 +14,8 @@ import 'package:running_planning/domain/repositories/prepa_repository.dart';
 import 'package:running_planning/domain/repositories/race_repository.dart';
 import 'package:running_planning/domain/repositories/step_repository.dart';
 import 'package:running_planning/domain/use_cases/auth/auth_use_case.dart';
+import 'package:running_planning/domain/use_cases/detail/is_user_creator_use_case.dart';
+import 'package:running_planning/domain/use_cases/detail/is_user_joined_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/load_prepa_detail_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/load_race_detail_use_case.dart';
 import 'package:running_planning/domain/use_cases/planning/get_planning_use_case.dart';
@@ -73,7 +75,6 @@ Future<void> init() async {
   sl.registerLazySingleton<PrepaRepository>(() => PrepaRepositoryImpl(sl()));
   sl.registerLazySingleton<StepRepository>(() => StepRepositoryImpl(sl()));
 
-
   //Use cases
   sl.registerLazySingleton(() => AuthUseCase(sl()));
   sl.registerLazySingleton(() => GetPlanningUseCase(sl()));
@@ -82,6 +83,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoadPrepaDetailUseCase(sl()));
   sl.registerLazySingleton(() => LoadRaceDetailUseCase(sl()));
   sl.registerLazySingleton(() => LoadPrepaStepsUseCase(sl()));
+  sl.registerLazySingleton(() => IsUserJoinedUseCase(sl()));
+  sl.registerLazySingleton(() => IsUserCreatorUseCase(sl()));
 
   //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
@@ -91,5 +94,13 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => UserRaceBloc(getUserRace: sl<GetUserRaceUseCase>()),
   );
-  sl.registerFactory(() => PrepaDetailBloc(loadPrepa: sl(), loadRace: sl(), loadSteps: sl()));
+  sl.registerFactory(
+    () => PrepaDetailBloc(
+      loadPrepa: sl(),
+      loadRace: sl(),
+      loadSteps: sl(),
+      isUserJoined: sl(),
+      isUserCreator: sl(),
+    ),
+  );
 }

@@ -11,6 +11,7 @@ class Prepa {
   final RaceType raceType;
   final String raceId;
   final List<User>? athletes;
+  final String? creatorId;
 
   Prepa({
     required this.id,
@@ -22,6 +23,7 @@ class Prepa {
     required this.raceType,
     required this.raceId,
     this.athletes,
+    this.creatorId,
   });
 
   factory Prepa.fromApi(Map<String, dynamic> json) {
@@ -40,6 +42,7 @@ class Prepa {
       athletes: (json['userList'] as List<dynamic>?)
           ?.map((user) => User.fromApi(user as Map<String, dynamic>))
           .toList() ?? [],
+      creatorId: json['createdBy']["_id"] as String? ?? 'Aucune données cahrgé',
     );
   }
 }

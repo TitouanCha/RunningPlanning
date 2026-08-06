@@ -12,6 +12,23 @@ class PrepaDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: BlocBuilder<PrepaDetailBloc, PrepaDetailState>(
+        builder: (context, state) {
+          if (state.isUserJoinedPrepa) {
+            return FloatingActionButton.extended(
+              onPressed: null,
+              backgroundColor: Colors.redAccent,
+              icon: Icon(Icons.exit_to_app, color: Colors.white),
+              label: Text("Quitter la prepa",style: TextStyle(color: Colors.white)),
+            );
+          }
+          return FloatingActionButton.extended(
+            onPressed: () {},
+            icon: Icon(Icons.add),
+            label: Text("Rejoindre la prepa"),
+          );
+        },
+      ),
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
         title: BlocBuilder<PrepaDetailBloc, PrepaDetailState>(
@@ -36,10 +53,37 @@ class PrepaDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 8.0),
+                  if (state.isUserJoinedPrepa)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.green[100],
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(color: Colors.green),
+                        ),
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.check_circle, color: Colors.green),
+                            SizedBox(width: 8.0),
+                            Text(
+                              "Vous avez rejoint cette préparation",
+                              style: TextStyle(
+                                color: Colors.green[800],
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Prepa du ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.startDate ?? DateTime.now())} au ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.endDate ?? DateTime.now())}",
+                      "Prepa du ${DateFormat('dd/MM/yyyy', 'fr_FR').format(state.prepa?.startDate ?? DateTime.now())} au ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.endDate ?? DateTime.now())}",
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -53,7 +97,12 @@ class PrepaDetailScreen extends StatelessWidget {
                   ),
                   if (state.steps.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(top: 16.0, left: 8.0, right: 8.0, bottom: 4.0),
+                      padding: const EdgeInsets.only(
+                        top: 16.0,
+                        left: 8.0,
+                        right: 8.0,
+                        bottom: 4.0,
+                      ),
                       child: Text(
                         "Etapes de la prepa : ",
                         style: TextStyle(fontSize: 20),

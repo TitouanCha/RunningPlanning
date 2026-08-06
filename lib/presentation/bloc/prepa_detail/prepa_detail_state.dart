@@ -10,6 +10,8 @@ class PrepaDetailState {
   final List<TrainingStep> steps;
   final List<Training> selectedTrainings;
   final String? errorMessage;
+  final bool isUserJoinedPrepa;
+  final bool isUserCreator;
 
   const PrepaDetailState({
     this.prepaId = '',
@@ -19,6 +21,8 @@ class PrepaDetailState {
     this.steps = const [],
     this.selectedTrainings = const [],
     this.errorMessage,
+    this.isUserJoinedPrepa = false,
+    this.isUserCreator = false,
   });
 
   PrepaDetailState copyWith({
@@ -28,6 +32,8 @@ class PrepaDetailState {
     List<TrainingStep>? steps,
     List<Training>? selectedTrainings,
     String? errorMessage,
+    bool? isUserJoinedPrepa,
+    bool? isUserCreator,
   }) {
     return PrepaDetailState(
       status: status ?? this.status,
@@ -36,6 +42,8 @@ class PrepaDetailState {
       steps: steps ?? this.steps,
       selectedTrainings: selectedTrainings ?? this.selectedTrainings,
       errorMessage: errorMessage ?? this.errorMessage,
+      isUserJoinedPrepa: isUserJoinedPrepa ?? this.isUserJoinedPrepa,
+      isUserCreator: isUserCreator ?? this.isUserCreator
     );
   }
 }

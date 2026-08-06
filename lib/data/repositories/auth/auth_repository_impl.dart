@@ -24,6 +24,7 @@ class AuthRepositoryImpl implements AuthRepository {
       model = await _dataSource.login(authModel);
 
       await _secureStorage.saveToken(model.token);
+      await _secureStorage.saveUserId(model.id);
       return Right(model);
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
