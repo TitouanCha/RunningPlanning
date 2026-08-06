@@ -44,7 +44,7 @@ class DayDetailWidget extends StatelessWidget {
                     return ListTile(
                       title: Text(race.name),
                       subtitle: Text(
-                        "Le ${DateFormat('d MM yyyy', 'fr_FR').format(race.date)} - ${race.distance}Km - ${race.type.label}",
+                        "${race.distance}Km - ${race.type.label}",
                       ),
                     );
                   },

@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/entities/race.dart';
 
@@ -21,31 +23,47 @@ class RaceDetailInfoWidget extends StatelessWidget{
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "${race?.name}",
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                "Le ${race?.date}",
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/cup.svg",
+                    width: 24.0,
+                  ),
+                  SizedBox(width: 8.0),
+                  Text(
+                    "${race?.name}",
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               Text(
                 "${race?.distance}Km - ${race?.type.label}",
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 18.0,
                 ),
               ),
+              SizedBox(height: 8.0),
               Text(
-                "${race?.location}",
+                "Le ${DateFormat('d/MM/yyyy', 'fr_FR').format(race?.date ?? DateTime.now()) }",
                 style: TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 20.0,
                 ),
+              ),
+
+              Row(
+                children: [
+                  SvgPicture.asset("assets/icons/map-point.svg", width: 24.0),
+                  SizedBox(width: 8.0),
+                  Text(
+                    "${race?.location}",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

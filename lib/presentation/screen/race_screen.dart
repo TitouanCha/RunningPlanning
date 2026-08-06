@@ -15,7 +15,7 @@ class RacesScreen extends StatelessWidget {
           // Action à définir
         },
         icon: const Icon(Icons.add),
-        label: const Text("Rejoindre une nouvelle course"),
+        label: const Text("Commencer une nouvelle prépa"),
       ),
       body: BlocBuilder<UserRaceBloc, UserRaceState>(
         builder: (context, state) {

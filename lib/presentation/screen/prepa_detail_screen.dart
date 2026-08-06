@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
 import 'package:running_planning/presentation/widget/race_detail_widget.dart';
 
@@ -40,9 +41,9 @@ class PrepaDetailScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Prepa du ${state.prepa?.startDate.toString()} au ${state.prepa?.endDate.toString()}",
+                      "Prepa du ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.startDate ?? DateTime.now())} au ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.endDate ?? DateTime.now())}",
                       style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.start,
