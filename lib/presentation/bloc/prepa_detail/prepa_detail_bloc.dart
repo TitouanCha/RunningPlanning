@@ -8,6 +8,7 @@ import '../../../domain/entities/prepa.dart';
 import '../../../domain/entities/race.dart';
 import '../../../domain/entities/step.dart';
 import '../../../domain/use_cases/detail/load_prepa_detail_use_case.dart';
+import '../../../domain/use_cases/detail/load_prepa_steps_use_case.dart';
 
 part 'prepa_detail_event.dart';
 
@@ -16,8 +17,9 @@ part 'prepa_detail_state.dart';
 class PrepaDetailBloc extends Bloc<PrepaDetailEvent, PrepaDetailState> {
   final LoadPrepaDetailUseCase loadPrepa;
   final LoadRaceDetailUseCase loadRace;
+  final LoadPrepaStepsUseCase loadSteps;
 
-  PrepaDetailBloc({ required this.loadPrepa, required this.loadRace}) : super(PrepaDetailState()) {
+  PrepaDetailBloc({ required this.loadPrepa, required this.loadRace, required this.loadSteps}) : super(PrepaDetailState()) {
     on<LoadPrepaDetail>(_onLoadPrepaDetail);
     on<SelectTraining>(_onSelectTraining);
   }
@@ -29,7 +31,6 @@ class PrepaDetailBloc extends Bloc<PrepaDetailEvent, PrepaDetailState> {
     emit(state.copyWith(status: PrepaDetailStatus.loadingPrepa));
 
     final prepaResult = await loadPrepa(event.prepaId);
-
     if (prepaResult.isLeft()) {
       emit(state.copyWith(
         status: PrepaDetailStatus.failure,
@@ -42,7 +43,6 @@ class PrepaDetailBloc extends Bloc<PrepaDetailEvent, PrepaDetailState> {
     emit(state.copyWith(prepa: prepa));
 
     final raceResult = await loadRace(prepa.raceId);
-
     if (raceResult.isLeft()) {
       emit(state.copyWith(
         status: PrepaDetailStatus.failure,
@@ -52,7 +52,23 @@ class PrepaDetailBloc extends Bloc<PrepaDetailEvent, PrepaDetailState> {
     }
 
     final race = raceResult.getOrElse(() => throw Exception());
-    emit(state.copyWith(status: PrepaDetailStatus.success, race: race));
+    emit(state.copyWith(race: race));
+
+    final stepsResult = await loadSteps(prepa.id);
+    if(stepsResult.isLeft()){
+      emit(state.copyWith(
+        status: PrepaDetailStatus.failure,
+        errorMessage: "Erreur de chargement des étapes de la prepa",
+      ));
+      return;
+    }
+
+    final trainingSteps = stepsResult.getOrElse(() => throw Exception());
+    emit(state.copyWith(
+      status: PrepaDetailStatus.success,
+      steps: trainingSteps,
+    ));
+
   }
 
   Future<void> _onSelectTraining(

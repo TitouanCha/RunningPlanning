@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:running_planning/core/network/dio_client.dart';
 import 'package:running_planning/data/data_sources/prepa/prepa_data_source.dart';
+import 'package:running_planning/data/data_sources/step/step_data_source.dart';
 import 'package:running_planning/data/repositories/auth/auth_data_source.dart';
 import 'package:running_planning/data/repositories/auth/auth_data_source_impl.dart';
 import 'package:running_planning/data/data_sources/planning/planning_data_source_impl.dart';
@@ -11,6 +12,7 @@ import 'package:running_planning/domain/repositories/auth_repository.dart';
 import 'package:running_planning/domain/repositories/planning_repository.dart';
 import 'package:running_planning/domain/repositories/prepa_repository.dart';
 import 'package:running_planning/domain/repositories/race_repository.dart';
+import 'package:running_planning/domain/repositories/step_repository.dart';
 import 'package:running_planning/domain/use_cases/auth/auth_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/load_prepa_detail_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/load_race_detail_use_case.dart';
@@ -27,9 +29,12 @@ import 'data/data_sources/planning/planning_data_source.dart';
 import 'data/data_sources/prepa/prepa_data_source_impl.dart';
 import 'data/data_sources/race/race_data_source.dart';
 import 'data/data_sources/race/race_data_source_impl.dart';
+import 'data/data_sources/step/step_data_source_impl.dart';
 import 'data/repositories/auth/auth_repository_impl.dart';
 import 'data/repositories/prepa_repository_impl.dart';
 import 'data/repositories/race_repository_impl.dart';
+import 'data/repositories/step_repository_impl.dart';
+import 'domain/use_cases/detail/load_prepa_steps_use_case.dart';
 
 final sl = GetIt.instance;
 
@@ -38,8 +43,13 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FlutterSecureStorage());
 
   sl.registerLazySingleton(() => DioClient());
+
+  //Data sources
   sl.registerLazySingleton<SecureStorage>(() => SecureStorage());
   sl.registerLazySingleton<AuthDataSource>(() => AuthDatasourceImpl(sl()));
+  sl.registerLazySingleton<StepDataSources>(
+    () => StepDataSourceImpl(sl(), sl()),
+  );
   sl.registerLazySingleton<PlanningDataSource>(
     () => PlanningDataSourceImpl(sl()),
   );
@@ -50,6 +60,7 @@ Future<void> init() async {
     () => PrepaDataSourceImpl(sl(), sl()),
   );
 
+  //Repositories
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(sl(), sl()),
   );
@@ -60,16 +71,19 @@ Future<void> init() async {
     () => RaceRepositoryImpl(remoteDataSource: sl()),
   );
   sl.registerLazySingleton<PrepaRepository>(() => PrepaRepositoryImpl(sl()));
+  sl.registerLazySingleton<StepRepository>(() => StepRepositoryImpl(sl()));
 
 
+  //Use cases
   sl.registerLazySingleton(() => AuthUseCase(sl()));
   sl.registerLazySingleton(() => GetPlanningUseCase(sl()));
   sl.registerLazySingleton(() => LoadMonthCalendarUseCase(sl()));
   sl.registerLazySingleton(() => GetUserRaceUseCase(sl()));
   sl.registerLazySingleton(() => LoadPrepaDetailUseCase(sl()));
   sl.registerLazySingleton(() => LoadRaceDetailUseCase(sl()));
+  sl.registerLazySingleton(() => LoadPrepaStepsUseCase(sl()));
 
-
+  //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
   sl.registerLazySingleton(
     () => PlanningBloc(getPlanningUseCase: sl(), loadCalendarUseCase: sl()),
@@ -77,7 +91,5 @@ Future<void> init() async {
   sl.registerLazySingleton(
     () => UserRaceBloc(getUserRace: sl<GetUserRaceUseCase>()),
   );
-  sl.registerFactory(
-      () => PrepaDetailBloc(loadPrepa: sl(), loadRace: sl())
-  );
+  sl.registerFactory(() => PrepaDetailBloc(loadPrepa: sl(), loadRace: sl(), loadSteps: sl()));
 }

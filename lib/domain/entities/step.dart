@@ -4,9 +4,9 @@ class TrainingStep {
   final String description;
   final DateTime startDate;
   final DateTime endDate;
-  final String prepaId;
-  final String prepaName;
-  final String prepaStartDate;
+  final String? prepaId;
+  final String? prepaName;
+  final String? prepaStartDate;
 
   TrainingStep({
     required this.id,
@@ -14,9 +14,9 @@ class TrainingStep {
     required this.description,
     required this.startDate,
     required this.endDate,
-    required this.prepaId,
-    required this.prepaName,
-    required this.prepaStartDate,
+    this.prepaId,
+    this.prepaName,
+    this.prepaStartDate,
   });
 
   factory TrainingStep.fromApi(Map<String, dynamic> json){
@@ -26,9 +26,9 @@ class TrainingStep {
         description: json['description'] as String? ?? 'Aucune données cahrgé',
         startDate: DateTime.parse(json['startDate'] as String? ?? '2004-12-16'),
         endDate: DateTime.parse(json['endDate'] as String? ?? '2004-12-16'),
-        prepaId: json['idPrepa']['_id'] as String? ?? 'Aucune données cahrgé',
-        prepaName: json['idPrepa']['name'] as String? ?? 'Aucune données cahrgé',
-        prepaStartDate: json['idPrepa']['startDate'] as String? ?? 'Aucune données cahrgé'
+        //prepaId: json['idPrepa']['_id'] as String? ?? 'Aucune données cahrgé',
+        //prepaName: json['idPrepa']['name'] as String? ?? 'Aucune données cahrgé',
+        //prepaStartDate: json['idPrepa']['startDate'] as String? ?? 'Aucune données cahrgé'
     );
   }
 }

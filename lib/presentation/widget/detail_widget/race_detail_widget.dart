@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import '../../domain/entities/race.dart';
+import '../../../domain/entities/race.dart';
 
 class RaceDetailInfoWidget extends StatelessWidget{
   final Race? race;
