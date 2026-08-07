@@ -56,10 +56,21 @@ class PrepaDataSourceImpl extends PrepaDataSource{
   Future<void> joinPrepa(String prepaId) async {
     final userToken = await _secureStorage.getToken();
     return await _client.dio.patch(
-          "prepa/$prepaId/runners/me",
+          "/prepa/$prepaId/runners/me",
           options: Options(headers: {'Authorization': 'Bearer $userToken'}),
     ).then((response) {
-      // Handle the response if needed
+      return;
+    });
+  }
+
+  @override
+  Future<void> leavePrepa(String prepaId) async {
+    final userToken = await _secureStorage.getToken();
+    return _client.dio.delete(
+      "/prepa/$prepaId/runners/me",
+      options: Options(headers: {'Authorization': 'Bearer $userToken'}),
+    ).then((response) {
+      return;
     });
   }
 }

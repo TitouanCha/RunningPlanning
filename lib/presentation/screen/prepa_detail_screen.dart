@@ -16,14 +16,18 @@ class PrepaDetailScreen extends StatelessWidget {
         builder: (context, state) {
           if (state.isUserJoinedPrepa) {
             return FloatingActionButton.extended(
-              onPressed: null,
+              onPressed: () {
+                context.read<PrepaDetailBloc>().add(LeavePrepa(prepaId: prepaId));
+              },
               backgroundColor: Colors.redAccent,
               icon: Icon(Icons.exit_to_app, color: Colors.white),
               label: Text("Quitter la prepa",style: TextStyle(color: Colors.white)),
             );
           }
           return FloatingActionButton.extended(
-            onPressed: () {},
+            onPressed: () {
+              context.read<PrepaDetailBloc>().add(JoinPrepa(prepaId: prepaId));
+            },
             icon: Icon(Icons.add),
             label: Text("Rejoindre la prepa"),
           );

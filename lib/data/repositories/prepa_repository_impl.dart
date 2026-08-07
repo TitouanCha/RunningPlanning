@@ -67,6 +67,19 @@ class PrepaRepositoryImpl extends PrepaRepository {
   }
 
   @override
+  Future<Either<Failure, void>> leavePrepa(String prepaId) async {
+    try {
+      await _dataSource.leavePrepa(prepaId);
+      return Future.value(Right(null));
+    } catch (e) {
+      if (e is NetworkFailure) {
+        return Left(FetchFailure(e.message));
+      }
+      return Left(FetchFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, Prepa>> savePrepa(String prepa) {
     // TODO: implement savePrepa
     throw UnimplementedError();

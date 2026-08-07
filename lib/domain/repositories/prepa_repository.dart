@@ -9,4 +9,5 @@ abstract class PrepaRepository {
   Future<Either<Failure, List<Prepa>>> getUserPrepas();
   Future<Either<Failure, Prepa>> getPrepaById(String prepaId);
   Future<Either<Failure, void>> joinPrepa(String prepaId);
+  Future<Either<Failure, void>> leavePrepa(String prepaId);
 }

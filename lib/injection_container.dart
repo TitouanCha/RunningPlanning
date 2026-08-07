@@ -38,6 +38,8 @@ import 'data/repositories/auth/auth_repository_impl.dart';
 import 'data/repositories/prepa_repository_impl.dart';
 import 'data/repositories/race_repository_impl.dart';
 import 'data/repositories/step_repository_impl.dart';
+import 'domain/use_cases/detail/join_prepa_use_case.dart';
+import 'domain/use_cases/detail/leave_prepa_use_case.dart';
 import 'domain/use_cases/detail/load_prepa_steps_use_case.dart';
 
 final sl = GetIt.instance;
@@ -88,6 +90,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => IsUserJoinedUseCase(sl()));
   sl.registerLazySingleton(() => IsUserCreatorUseCase(sl()));
   sl.registerLazySingleton(() => LoadPrepasListUseCase(sl()));
+  sl.registerLazySingleton(() => JoinPrepaUseCase(sl()));
+  sl.registerLazySingleton(() => LeavePrepaUseCase(sl()));
 
   //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
@@ -107,6 +111,8 @@ Future<void> init() async {
       loadSteps: sl(),
       isUserJoined: sl(),
       isUserCreator: sl(),
+      joinPrepa: sl(),
+      leavePrepa: sl(),
     ),
   );
 }
