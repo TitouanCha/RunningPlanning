@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
+import 'package:running_planning/presentation/bloc/prepa_list/prepa_list_bloc.dart';
 import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:running_planning/presentation/screen/prepa_detail_screen.dart';
+import 'package:running_planning/presentation/screen/prepa_list_screen.dart';
 import 'package:running_planning/presentation/screen/race_screen.dart';
 import 'core/nav_enum.dart';
 import 'domain/repositories/auth_repository.dart';
@@ -35,6 +37,9 @@ class MyApp extends StatelessWidget {
               sl<PlanningBloc>()..add(LoadCalendar(date: DateTime.now())),
         ),
         BlocProvider(create: (context) => sl<UserRaceBloc>()..add(LoadUserRaces(isActiveRaces: true))),
+        BlocProvider(
+          create: (context) => sl<PrepaListBloc>()..add(LoadPrepaList()),
+        ),
       ],
       child: MaterialApp(
         title: 'Training App',
@@ -100,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final List<Widget> _pages = [
-    const Center(child: Text('Entrainement')),
+    PrepaListScreen(),
     PlanningScreen(),
     RacesScreen(),
   ];

@@ -6,7 +6,7 @@ import '../presentation/screen/planning_screen.dart';
 
 enum NavEnum {
   planning(label: 'Planning', iconPath: 'assets/icons/calendar.svg'),
-  training(label: 'Prepas', iconPath: 'assets/icons/dumbbell.svg'),
+  training(label: 'Liste des Prepas', iconPath: 'assets/icons/dumbbell.svg'),
   profile(label: 'Profil', iconPath: 'assets/icons/profile.svg'),
   trainingDetail(label: 'Détail entrainement', iconPath: 'assets/icons/dumbbell.svg'),
   prepaDetail(label: 'Détail prépa', iconPath: 'assets/icons/prepa.svg'),

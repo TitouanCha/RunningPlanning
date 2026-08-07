@@ -141,7 +141,7 @@ class DayDetailWidget extends StatelessWidget {
                     return ListTile(
                       title: Text(prepa.name),
                       subtitle: Text(
-                        "Du ${DateFormat('d MM yyyy', 'fr_FR').format(prepa.startDate)} au ${DateFormat('d MM yyyy', 'fr_FR').format(prepa.endDate)}",
+                        "Du ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.startDate)} au ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.endDate)}",
                       ),
                     );
                   },
