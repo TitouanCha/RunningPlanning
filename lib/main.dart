@@ -4,6 +4,7 @@ import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_list/prepa_list_bloc.dart';
+import 'package:running_planning/presentation/bloc/races/races_bloc.dart';
 import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
@@ -12,6 +13,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:running_planning/presentation/screen/prepa_detail_screen.dart';
 import 'package:running_planning/presentation/screen/prepa_list_screen.dart';
 import 'package:running_planning/presentation/screen/race_screen.dart';
+import 'package:running_planning/presentation/screen/user_race_screen.dart';
 import 'core/nav_enum.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/use_cases/auth/auth_use_case.dart';
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => sl<PrepaListBloc>()..add(LoadPrepaList()),
         ),
+        BlocProvider(create: (context) => sl<RacesBloc>()..add(LoadRaces())),
       ],
       child: MaterialApp(
         title: 'Training App',
@@ -107,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     PrepaListScreen(),
     PlanningScreen(),
-    RacesScreen(),
+    RaceScreen(),
   ];
 
   @override

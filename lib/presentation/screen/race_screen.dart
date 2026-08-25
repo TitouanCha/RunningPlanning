@@ -1,150 +1,195 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
+import 'package:running_planning/presentation/bloc/races/races_bloc.dart';
 
-class RacesScreen extends StatelessWidget {
-  const RacesScreen({super.key});
+class RaceScreen extends StatefulWidget {
+  const RaceScreen({super.key});
+
+  @override
+  State<RaceScreen> createState() => _RaceScreenState();
+}
+
+class _RaceScreenState extends State<RaceScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[50],
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Action à définir
+          context.read<RacesBloc>().add(LoadRaces());
         },
-        icon: const Icon(Icons.add),
-        label: const Text("Commencer une nouvelle prépa"),
+        label: Row(
+          children: [
+            Icon(Icons.add_circle_outline_outlined),
+            SizedBox(width: 4),
+            Text('Ajouter une course'),
+          ],
+        ),
       ),
-      body: BlocBuilder<UserRaceBloc, UserRaceState>(
+      body: BlocBuilder<RacesBloc, RacesState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if (state.status == UserRaceStatus.error)
-                    Center(
-                      child: Text(
-                        state.errorMessage ?? "Une erreur est survenue",
-                      ),
+          if (state.status == RaceStatus.loadingRace) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status == RaceStatus.error) {
+            return Center(child: Text('Erreur : ${state.errorMessage}'));
+          }
+          if (state.races.isEmpty) {
+            return const Center(child: Text('Aucune course disponible'));
+          }
+          return Column(
+            children: [
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher une course...',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Vos courses à venir",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  if (state.status == UserRaceStatus.loadingNextRace)
-                    const Center(child: CircularProgressIndicator()),
-                  if (state.userNextPrepa.isNotEmpty)
-                    ListView.builder(
-                      itemCount: state.userNextPrepa.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/PrepaDetail',
-                              arguments: state.userNextPrepa[index].id,
-                            );
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text(state.userNextPrepa[index].raceName),
-                              subtitle: Text(
-                                'Le ${DateFormat('dd/MM/yyyy', 'fr_FR').format(state.userNextPrepa[index].raceDate)}',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  SizedBox(height: 18.0),
-                  GestureDetector(
-                    onTap: () {
-                      context.read<UserRaceBloc>().add(
-                        TogglePastRaceDisplayed(),
-                      );
-                      if (!state.isPastRaceDisplayed) {
-                        context.read<UserRaceBloc>().add(
-                          LoadUserRaces(isActiveRaces: false),
-                        );
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Vos courses passées",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            state.isPastRaceDisplayed ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined,
-                            color: Colors.white,
-                            size: 25.0,
-                          ),
-                        ],
-                      ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 16,
                     ),
                   ),
-                  SizedBox(height: 8.0),
-                  if (state.status == UserRaceStatus.loadingPastRace)
-                    const Center(child: CircularProgressIndicator()),
-                  if (state.userPastPrepa.isNotEmpty &&
-                      state.isPastRaceDisplayed)
-                    ListView.builder(
-                      itemCount: state.userPastPrepa.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/PrepaDetail',
-                              arguments: state.userPastPrepa[index].id,
-                            );
-                          },
-                          child: Card(
-                            child: ListTile(
-                              title: Text(state.userPastPrepa[index].raceName),
-                              subtitle: Text(
-                                'Le ${DateFormat('dd/MM/yyyy', 'fr_FR').format(state.userNextPrepa[index].raceDate)}',
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                ],
+                  onChanged: (value) => context.read<RacesBloc>().add(
+                    SearchRaces(query: _searchController.text),
+                  ),
+                ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<RaceListSort>(
+                        initialValue: RaceListSort.dateDesc,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        ),
+                        selectedItemBuilder: (context) => RaceListSort.values.map((sort) {
+                          return Row(
+                            children: [
+                              const Icon(Icons.sort, size: 18, color: Colors.grey),
+                              const SizedBox(width: 8),
+                              const Text('Trier par : ', style: TextStyle(color: Colors.grey)),
+                              Text(sort.label),
+                            ],
+                          );
+                        }).toList(),
+                        items: RaceListSort.values.map((sort) {
+                          return DropdownMenuItem<RaceListSort>(
+                            value: sort,
+                            child: Text(sort.label),
+                          );
+                        }).toList(),
+                        onChanged: (sort) {
+                          if (sort != null) {
+                            context.read<RacesBloc>().add(
+                              SortRaces(sort: sort),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: state.races.length,
+                  itemBuilder: (context, index) {
+                    final race = state.races[index];
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    race.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Chip(
+                                  label: Text(race.type.name),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 16,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  race.location,
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.calendar_today,
+                                  size: 16,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${race.date.day}/${race.date.month}/${race.date.year}',
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.straighten,
+                                  size: 16,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 4),
+                                Text('${race.distance} km'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),

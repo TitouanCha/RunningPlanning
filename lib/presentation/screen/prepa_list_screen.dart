@@ -25,10 +25,6 @@ class _PrepaListScreenState extends State<PrepaListScreen> {
       body: BlocBuilder<PrepaListBloc, PrepaListState>(
         builder: (context, state) {
           final bloc = context.read<PrepaListBloc>();
-          final displayedPrepas = state.prepas
-              .where((p) => p.name.toLowerCase().contains(_searchController.text.toLowerCase()))
-              .toList();
-
           return Column(
             children: [
               const SizedBox(height: 20),
@@ -39,10 +35,15 @@ class _PrepaListScreenState extends State<PrepaListScreen> {
                   decoration: InputDecoration(
                     hintText: 'Rechercher une prépa...',
                     prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: 16,
+                    ),
                   ),
-                  onChanged: (_) => setState(() {}),
+                  onChanged: (value) => bloc.add(SearchPrepa(value)),
                 ),
               ),
               const SizedBox(height: 8),
@@ -52,15 +53,24 @@ class _PrepaListScreenState extends State<PrepaListScreen> {
                   children: [
                     const Icon(Icons.sort, size: 18, color: Colors.grey),
                     const SizedBox(width: 8),
-                    const Text('Trier par :', style: TextStyle(color: Colors.grey)),
+                    const Text(
+                      'Trier par :',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                     const SizedBox(width: 8),
                     DropdownButton<PrepaListSort>(
                       value: state.sort,
                       underline: const SizedBox(),
                       items: PrepaListSort.values
-                          .map((e) => DropdownMenuItem(value: e, child: Text(e.label)))
+                          .map(
+                            (e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e.label),
+                            ),
+                          )
                           .toList(),
-                      onChanged: (val) => val != null ? bloc.add(ChangePrepaSort(val)) : null,
+                      onChanged: (val) =>
+                          val != null ? bloc.add(ChangePrepaSort(val)) : null,
                     ),
                   ],
                 ),
@@ -69,15 +79,21 @@ class _PrepaListScreenState extends State<PrepaListScreen> {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: displayedPrepas.length,
+                  itemCount: state.prepas.length,
                   itemBuilder: (context, index) {
-                    final prepa = displayedPrepas[index];
+                    final prepa = state.prepas[index];
                     return GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/PrepaDetail', arguments: prepa.id),
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        '/PrepaDetail',
+                        arguments: prepa.id,
+                      ),
                       child: Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         elevation: 3,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(14),
                           child: Row(
@@ -86,20 +102,37 @@ class _PrepaListScreenState extends State<PrepaListScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(prepa.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                    Text("Du ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.startDate)} au ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.endDate)}"),
+                                    Text(
+                                      prepa.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Du ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.startDate)} au ${DateFormat('dd/MM/yyyy', 'fr_FR').format(prepa.endDate)}",
+                                    ),
                                     const SizedBox(height: 4),
                                     Row(
                                       children: [
-                                        _InfoChip(icon: Icons.timer_outlined, label: '${prepa.prepaDuration} jour.'),
+                                        _InfoChip(
+                                          icon: Icons.timer_outlined,
+                                          label: '${prepa.prepaDuration} jour.',
+                                        ),
                                         const SizedBox(width: 8),
-                                        _InfoChip(icon: Icons.flag_outlined, label: '${prepa.raceDistance} km'),
+                                        _InfoChip(
+                                          icon: Icons.straighten,
+                                          label: '${prepa.raceDistance} km',
+                                        ),
                                       ],
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_right, color: Colors.grey),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: Colors.grey,
+                              ),
                             ],
                           ),
                         ),
@@ -120,11 +153,7 @@ class _InfoChip extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const _InfoChip({
-    super.key,
-    required this.icon,
-    required this.label,
-  });
+  const _InfoChip({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -133,25 +162,16 @@ class _InfoChip extends StatelessWidget {
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 16,
-            color: Colors.blue.shade800,
-          ),
+          Icon(icon, size: 16, color: Colors.blue.shade800),
           const SizedBox(width: 4),
           Text(
             label,
-            style: TextStyle(
-              color: Colors.blue.shade800,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: Colors.blue.shade800, fontSize: 14),
           ),
         ],
       ),
       backgroundColor: Colors.blue.shade50,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 }

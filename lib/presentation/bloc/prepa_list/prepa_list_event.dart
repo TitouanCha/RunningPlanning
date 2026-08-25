@@ -14,3 +14,8 @@ class ChangePrepaSort extends PrepaListEvent {
   final PrepaListSort sort;
   ChangePrepaSort(this.sort);
 }
+
+class SearchPrepa extends PrepaListEvent {
+  final String query;
+  SearchPrepa(this.query);
+}

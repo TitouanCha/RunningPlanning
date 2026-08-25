@@ -13,6 +13,7 @@ class PrepaListBloc extends Bloc<PrepaListEvent, PrepaListState> {
     on<LoadPrepaList>(_onLoadPrepaList);
     on<ChangePrepaFilter>(_onChangeFilter);
     on<ChangePrepaSort>(_onChangeSort);
+    on<SearchPrepa>(_onSearchPrepa);
   }
 
   Future<void> _onLoadPrepaList(LoadPrepaList event, Emitter<PrepaListState> emit) async {
@@ -43,6 +44,12 @@ class PrepaListBloc extends Bloc<PrepaListEvent, PrepaListState> {
   void _onChangeSort(ChangePrepaSort event, Emitter<PrepaListState> emit) {
     final sorted = _applySortAndFilter(state.allPrepas, state.filter, event.sort);
     emit(state.copyWith(sort: event.sort, prepas: sorted));
+  }
+
+  void _onSearchPrepa(SearchPrepa event, Emitter<PrepaListState> emit) {
+    final query = event.query.toLowerCase();
+    final filtered = state.allPrepas.where((prepa) => prepa.name.toLowerCase().contains(query)).toList();
+    emit(state.copyWith(prepas: filtered));
   }
 
   List<Prepa> _applySortAndFilter(List<Prepa> prepas, PrepaListFilter filter, PrepaListSort sort) {

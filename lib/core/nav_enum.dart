@@ -11,6 +11,7 @@ enum NavEnum {
   trainingDetail(label: 'Détail entrainement', iconPath: 'assets/icons/dumbbell.svg'),
   prepaDetail(label: 'Détail prépa', iconPath: 'assets/icons/prepa.svg'),
   races(label: 'Courses', iconPath: 'assets/icons/race.svg'),
+  userRaces(label: 'Vos courses', iconPath: 'assets/icons/race.svg'),
   raceDetail(label: 'Détail course', iconPath: 'assets/icons/race.svg');
 
   const NavEnum({required this.label, required this.iconPath});
