@@ -4,6 +4,7 @@ import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_list/prepa_list_bloc.dart';
+import 'package:running_planning/presentation/bloc/race_detail/race_detail_bloc.dart';
 import 'package:running_planning/presentation/bloc/races/races_bloc.dart';
 import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
 import 'package:running_planning/presentation/screen/login_screen.dart';
@@ -12,9 +13,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:running_planning/presentation/screen/prepa_detail_screen.dart';
 import 'package:running_planning/presentation/screen/prepa_list_screen.dart';
-import 'package:running_planning/presentation/screen/race_screen.dart';
+import 'package:running_planning/presentation/screen/race_detail_screen.dart';
+import 'package:running_planning/presentation/screen/races_screen.dart';
 import 'package:running_planning/presentation/screen/user_race_screen.dart';
 import 'core/nav_enum.dart';
+import 'domain/entities/race.dart';
 import 'domain/repositories/auth_repository.dart';
 import 'domain/use_cases/auth/auth_use_case.dart';
 import 'injection_container.dart';
@@ -58,6 +61,18 @@ class MyApp extends StatelessWidget {
               child: PrepaDetailScreen(prepaId: prepaId),
             );
           },
+          '/raceDetail': (context) {
+            final raceId = ModalRoute
+                .of(context)
+                ?.settings
+                .arguments as String;
+            return BlocProvider(
+              create: (_) =>
+              sl<RaceDetailBloc>()
+                ..add(LoadRaceDetail(raceId: raceId)),
+              child: RaceDetailScreen(raceId: raceId),
+            );
+          }
         },
         themeMode: ThemeMode.system,
         theme: ThemeData(
@@ -110,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     PrepaListScreen(),
     PlanningScreen(),
-    RaceScreen(),
+    RacesScreen(),
   ];
 
   @override

@@ -11,7 +11,8 @@ class Race {
   final RaceType type;
   final int distance;
   final String location;
-  final String prepaId;
+  final String description;
+  final List<String> prepaIds;
 
   Race({
     required this.id,
@@ -20,7 +21,8 @@ class Race {
     required this.type,
     required this.distance,
     required this.location,
-    required this.prepaId,
+    required this.description,
+    required this.prepaIds,
   });
 
   factory Race.fromApi(Map<String, dynamic> json){
@@ -34,9 +36,8 @@ class Race {
         ),
         distance: json['distance'] as int? ?? 0,
         location: json['location'] as String? ?? 'Aucune données chargé',
-        prepaId: (json['idPrepa'] is Map)
-            ? (json['idPrepa']['_id'] as String? ?? 'Aucune données chargé')
-            : (json['idPrepa'] as String? ?? 'Aucune données chargé'),
+        description: json['description'] as String? ?? 'Aucune données chargé',
+        prepaIds: (json['idPrepa'] as List<dynamic>? ?? []).map((e) => e.toString()).toList()
     );
   }
 }

@@ -22,11 +22,13 @@ import 'package:running_planning/domain/use_cases/planning/get_planning_use_case
 import 'package:running_planning/domain/use_cases/planning/load_month_calendar_use_case.dart';
 import 'package:running_planning/domain/use_cases/prepa/load_prepas_list_use_case.dart';
 import 'package:running_planning/domain/use_cases/races/get_new_races_use_case.dart';
+import 'package:running_planning/domain/use_cases/detail/get_race_detail_use_case.dart';
 import 'package:running_planning/domain/use_cases/races/get_user_race_use_case.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_list/prepa_list_bloc.dart';
+import 'package:running_planning/presentation/bloc/race_detail/race_detail_bloc.dart';
 import 'package:running_planning/presentation/bloc/races/races_bloc.dart';
 import 'package:running_planning/presentation/bloc/user_race/user_race_bloc.dart';
 
@@ -95,6 +97,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoadPrepasListUseCase(sl()));
   sl.registerLazySingleton(() => JoinPrepaUseCase(sl()));
   sl.registerLazySingleton(() => LeavePrepaUseCase(sl()));
+  sl.registerLazySingleton(() => GetRaceDetailUseCase(sl()));
 
   //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
@@ -119,4 +122,5 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton(() => RacesBloc(getRacesUseCase: sl()));
+  sl.registerFactory(() => RaceDetailBloc(getRaceDetail: sl(), getPrepaDetail: sl()));
 }

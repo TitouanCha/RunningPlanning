@@ -12,165 +12,220 @@ class PrepaDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       floatingActionButton: BlocBuilder<PrepaDetailBloc, PrepaDetailState>(
         builder: (context, state) {
           if (state.isUserJoinedPrepa) {
             return FloatingActionButton.extended(
-              onPressed: () {
-                context.read<PrepaDetailBloc>().add(LeavePrepa(prepaId: prepaId));
-              },
+              onPressed: () => context.read<PrepaDetailBloc>().add(LeavePrepa(prepaId: prepaId)),
               backgroundColor: Colors.redAccent,
-              icon: Icon(Icons.exit_to_app, color: Colors.white),
-              label: Text("Quitter la prepa",style: TextStyle(color: Colors.white)),
+              icon: const Icon(Icons.exit_to_app, color: Colors.white),
+              label: const Text("Quitter", style: TextStyle(color: Colors.white)),
             );
           }
           return FloatingActionButton.extended(
-            onPressed: () {
-              context.read<PrepaDetailBloc>().add(JoinPrepa(prepaId: prepaId));
-            },
-            icon: Icon(Icons.add),
-            label: Text("Rejoindre la prepa"),
+            onPressed: () => context.read<PrepaDetailBloc>().add(JoinPrepa(prepaId: prepaId)),
+            backgroundColor: Colors.blue.shade700,
+            icon: const Icon(Icons.add, color: Colors.white),
+            label: const Text("Rejoindre", style: TextStyle(color: Colors.white)),
           );
         },
-      ),
-      backgroundColor: Colors.blueGrey[50],
-      appBar: AppBar(
-        title: BlocBuilder<PrepaDetailBloc, PrepaDetailState>(
-          builder: (context, state) {
-            return Text(state.prepa?.name ?? "Prepa Detail");
-          },
-        ),
       ),
       body: BlocBuilder<PrepaDetailBloc, PrepaDetailState>(
         builder: (context, state) {
           if (state.status == PrepaDetailStatus.failure) {
-            return Center(
-              child: Text(state.errorMessage ?? "Erreur de chargement"),
-            );
+            return Center(child: Text(state.errorMessage ?? "Erreur de chargement"));
           }
           if (state.status == PrepaDetailStatus.loadingPrepa) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
-          return SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8.0),
-                  if (state.isUserJoinedPrepa)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.green[100],
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(color: Colors.green),
-                        ),
-                        padding: EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.check_circle, color: Colors.green),
-                            SizedBox(width: 8.0),
-                            Text(
-                              "Vous avez rejoint cette préparation",
-                              style: TextStyle(
-                                color: Colors.green[800],
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ],
-                        ),
+
+          final dateFormat = DateFormat('dd MMM yyyy', 'fr_FR');
+
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 200,
+                pinned: true,
+                stretch: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: const [StretchMode.zoomBackground],
+                  background: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue.shade900, Colors.blue.shade400],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Prepa du ${DateFormat('dd/MM/yyyy', 'fr_FR').format(state.prepa?.startDate ?? DateTime.now())} au ${DateFormat('d/MM/yyyy', 'fr_FR').format(state.prepa?.endDate ?? DateTime.now())}",
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaceDetailInfoWidget(race: state.race),
-                  ),
-                  if (state.steps.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 16.0,
-                        left: 8.0,
-                        right: 8.0,
-                        bottom: 4.0,
-                      ),
-                      child: Text(
-                        "Etapes de la prepa : ",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  if (state.steps.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.orangeAccent,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Aucune étape pour cette préparation",
-                          style: TextStyle(color: Colors.white, fontSize: 18.0),
-                        ),
-                      ),
-                    ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.steps.length,
-                    itemBuilder: (context, index) {
-                      final step = state.steps[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius: BorderRadius.circular(8.0),
+                    child: SafeArea(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 40),
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundColor: Colors.white24,
+                            child: const Icon(Icons.directions_run, color: Colors.white, size: 28),
                           ),
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          const SizedBox(height: 10),
+                          Text(
+                            state.prepa?.name ?? "Préparation",
+                            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            "${dateFormat.format(state.prepa?.startDate ?? DateTime.now())}  →  ${dateFormat.format(state.prepa?.endDate ?? DateTime.now())}",
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // -- Bandeau rejoint --
+                      if (state.isUserJoinedPrepa) ...[
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.green.shade300),
+                          ),
+                          child: Row(
                             children: [
+                              Icon(Icons.check_circle, color: Colors.green.shade600),
+                              const SizedBox(width: 10),
                               Text(
-                                "Etapes ${index + 1}",
+                                "Vous avez rejoint cette préparation",
                                 style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                step.name,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.0,
+                                  color: Colors.green.shade800,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        const SizedBox(height: 16),
+                      ],
+
+                      // -- Infos course --
+                      Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.flag, color: Colors.blue.shade600, size: 20),
+                                  const SizedBox(width: 8),
+                                  const Text("Course associée", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              const Divider(height: 20),
+                              RaceDetailInfoWidget(race: state.race),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // -- Titre étapes --
+                      Row(
+                        children: [
+                          Icon(Icons.format_list_numbered, color: Colors.blue.shade700),
+                          const SizedBox(width: 8),
+                          const Text("Étapes", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                          const Spacer(),
+                          Chip(
+                            label: Text('${state.steps.length}'),
+                            backgroundColor: Colors.blue.shade50,
+                            labelStyle: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      if (state.steps.isEmpty)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade50,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.orange.shade300),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.info_outline, color: Colors.orange.shade700),
+                              const SizedBox(width: 10),
+                              Text(
+                                "Aucune étape pour cette préparation",
+                                style: TextStyle(color: Colors.orange.shade800, fontSize: 15),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+
+              // -- Liste étapes --
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final step = state.steps[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                    child: Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.blue.shade700,
+                              radius: 20,
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    step.name,
+                                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.chevron_right, color: Colors.grey.shade400),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }, childCount: state.steps.length),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 80)),
+            ],
           );
         },
       ),
