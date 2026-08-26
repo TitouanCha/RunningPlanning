@@ -3,6 +3,7 @@ import 'package:running_planning/core/network/dio_client.dart';
 import 'package:running_planning/core/storage/secure_storage.dart';
 import 'package:running_planning/data/data_sources/step/step_data_source.dart';
 
+import '../../../domain/entities/prepa.dart';
 import '../../../domain/entities/step.dart';
 
 class StepDataSourceImpl extends StepDataSources {
@@ -19,13 +20,8 @@ class StepDataSourceImpl extends StepDataSources {
 
   @override
   Future<TrainingStep> getStepById(String id) async {
-    final String useToken = await _secureStorage.getToken();
-    final result = await _client.dio.get(
-      '/steps/$id',
-      options: Options(headers: {'Authorization': 'Bearer $useToken'}),
-    );
-    TrainingStep fetchedStep = TrainingStep.fromApi(result.data);
-    return fetchedStep;
+    // TODO: implement createPrepaStep
+    throw UnimplementedError();
   }
 
   @override
@@ -35,8 +31,9 @@ class StepDataSourceImpl extends StepDataSources {
       '/prepa/$prepaId/steps',
       options: Options(headers: {'Authorization': 'Bearer $useToken'}),
     );
+    Prepa fetchedPrepa = Prepa.fromApi(result.data['prepa']);
     List<TrainingStep> fetchedSteps = (result.data['steps'] as List)
-        .map((step) => TrainingStep.fromApi(step))
+        .map((step) => TrainingStep.fromApi(step, fetchedPrepa))
         .toList();
     return fetchedSteps;
   }

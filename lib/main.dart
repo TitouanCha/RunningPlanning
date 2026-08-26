@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:running_planning/presentation/bloc/add_steps_screen/add_steps_bloc.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:running_planning/presentation/screen/login_screen.dart';
 import 'package:running_planning/presentation/screen/planning_screen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:running_planning/presentation/screen/prepa_add_step_screen.dart';
 import 'package:running_planning/presentation/screen/prepa_detail_screen.dart';
 import 'package:running_planning/presentation/screen/prepa_list_screen.dart';
 import 'package:running_planning/presentation/screen/race_detail_screen.dart';
@@ -72,7 +74,14 @@ class MyApp extends StatelessWidget {
                 ..add(LoadRaceDetail(raceId: raceId)),
               child: RaceDetailScreen(raceId: raceId),
             );
-          }
+          },
+          '/PrepaAddStep': (context) {
+            final prepaId = ModalRoute.of(context)?.settings.arguments as String;
+            return BlocProvider(
+              create: (_) => sl<AddStepsBloc>()..add(InitStepId(prepaId: prepaId)),
+              child: PrepaAddStepScreen(prepaId: prepaId),
+            );
+          },
         },
         themeMode: ThemeMode.system,
         theme: ThemeData(

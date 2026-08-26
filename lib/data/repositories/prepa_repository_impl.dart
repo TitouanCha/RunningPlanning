@@ -1,12 +1,15 @@
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 
 import 'package:running_planning/core/errors/failures.dart';
 import 'package:running_planning/data/data_sources/prepa/prepa_data_source.dart';
 
 import 'package:running_planning/domain/entities/prepa.dart';
+import 'package:running_planning/domain/entities/step.dart';
 
 import '../../domain/repositories/prepa_repository.dart';
+import '../models/add_step_model.dart';
 
 class PrepaRepositoryImpl extends PrepaRepository {
   final PrepaDataSource _dataSource;
@@ -71,6 +74,19 @@ class PrepaRepositoryImpl extends PrepaRepository {
     try {
       await _dataSource.leavePrepa(prepaId);
       return Future.value(Right(null));
+    } catch (e) {
+      if (e is NetworkFailure) {
+        return Left(FetchFailure(e.message));
+      }
+      return Left(FetchFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TrainingStep>>> addSteps(String prepaId ,List<AddStepModel> steps) async {
+    try {
+      final List<TrainingStep> newStep = await _dataSource.addSteps(prepaId, steps);
+      return Future.value(Right(newStep));
     } catch (e) {
       if (e is NetworkFailure) {
         return Left(FetchFailure(e.message));

@@ -1,9 +1,12 @@
 
 
 import 'package:dio/dio.dart';
+import 'package:flutter/src/material/stepper.dart';
 import 'package:running_planning/core/network/dio_client.dart';
 import 'package:running_planning/data/data_sources/prepa/prepa_data_source.dart';
+import 'package:running_planning/data/models/add_step_model.dart';
 import 'package:running_planning/domain/entities/prepa.dart';
+import 'package:running_planning/domain/entities/step.dart';
 
 import '../../../core/storage/secure_storage.dart';
 
@@ -71,6 +74,20 @@ class PrepaDataSourceImpl extends PrepaDataSource{
       options: Options(headers: {'Authorization': 'Bearer $userToken'}),
     ).then((response) {
       return;
+    });
+  }
+
+  @override
+  Future<List<TrainingStep>> addSteps(String prepaId, List<AddStepModel> steps) async {
+    final userToken = await _secureStorage.getToken();
+    return _client.dio.post(
+      "/prepa/$prepaId/steps",
+      data: steps.map((step) => step.toJson()).toList(),
+      options: Options(headers: {'Authorization': 'Bearer $userToken'}),
+    ).then((response) {
+      return (response.data as List<dynamic>)
+          .map((step) => TrainingStep.fromApi(step as Map<String, dynamic>))
+          .toList();
     });
   }
 }

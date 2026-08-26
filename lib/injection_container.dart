@@ -13,6 +13,7 @@ import 'package:running_planning/domain/repositories/planning_repository.dart';
 import 'package:running_planning/domain/repositories/prepa_repository.dart';
 import 'package:running_planning/domain/repositories/race_repository.dart';
 import 'package:running_planning/domain/repositories/step_repository.dart';
+import 'package:running_planning/domain/use_cases/add/add_steps_use_case.dart';
 import 'package:running_planning/domain/use_cases/auth/auth_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/is_user_creator_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/is_user_joined_use_case.dart';
@@ -24,6 +25,7 @@ import 'package:running_planning/domain/use_cases/prepa/load_prepas_list_use_cas
 import 'package:running_planning/domain/use_cases/races/get_new_races_use_case.dart';
 import 'package:running_planning/domain/use_cases/detail/get_race_detail_use_case.dart';
 import 'package:running_planning/domain/use_cases/races/get_user_race_use_case.dart';
+import 'package:running_planning/presentation/bloc/add_steps_screen/add_steps_bloc.dart';
 import 'package:running_planning/presentation/bloc/auth/auth_bloc.dart';
 import 'package:running_planning/presentation/bloc/planning/planning_bloc.dart';
 import 'package:running_planning/presentation/bloc/prepa_detail/prepa_detail_bloc.dart';
@@ -98,6 +100,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => JoinPrepaUseCase(sl()));
   sl.registerLazySingleton(() => LeavePrepaUseCase(sl()));
   sl.registerLazySingleton(() => GetRaceDetailUseCase(sl()));
+  sl.registerLazySingleton(() => AddStepsUseCase(sl()));
 
   //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
@@ -123,4 +126,7 @@ Future<void> init() async {
   );
   sl.registerLazySingleton(() => RacesBloc(getRacesUseCase: sl()));
   sl.registerFactory(() => RaceDetailBloc(getRaceDetail: sl(), getPrepaDetail: sl()));
+  sl.registerFactory(
+      () => AddStepsBloc(addSteps: sl())
+  );
 }
