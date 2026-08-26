@@ -32,24 +32,30 @@ class RaceDetailScreen extends StatelessWidget {
                   expandedHeight: 200,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          race.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          race.type.label,
-                        )
-                      ],
-                    ),
+                    stretchModes: const [StretchMode.zoomBackground],
                     background: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blue.shade800, Colors.blue.shade400],
+                          colors: [Colors.deepOrangeAccent, Colors.deepOrangeAccent.shade400],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: SafeArea(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 40),
+                            Text(
+                              state.race?.name ?? "Course",
+                              style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              "Type : ${state.race?.type.label}",
+                              style: const TextStyle(color: Colors.white70, fontSize: 18),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -110,7 +116,7 @@ class RaceDetailScreen extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.grey.shade700,
                                     height: 1.5,
-                                    fontSize: 18
+                                    fontSize: 16
                                   ),
                                 ),
                               ],
@@ -132,7 +138,7 @@ class RaceDetailScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(24),
                               child: Text(
                                 'Aucune préparation disponible',
-                                style: TextStyle(color: Colors.grey.shade500),
+                                style: TextStyle(color: Colors.deepOrangeAccent),
                               ),
                             ),
                           ),
@@ -154,10 +160,10 @@ class RaceDetailScreen extends StatelessWidget {
                         ),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.blue.shade100,
+                            backgroundColor: Colors.deepOrangeAccent.shade100,
                             child: Icon(
                               Icons.directions_run,
-                              color: Colors.blue.shade700,
+                              color: Colors.deepOrangeAccent.shade700,
                             ),
                           ),
                           title: Text(
@@ -169,7 +175,7 @@ class RaceDetailScreen extends StatelessWidget {
                               const Icon(
                                 Icons.calendar_today,
                                 size: 12,
-                                color: Colors.grey,
+                                color: Colors.deepOrangeAccent,
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -219,7 +225,7 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: Colors.blue.shade600),
+          Icon(icon, size: 18, color: Colors.deepOrangeAccent),
           const SizedBox(width: 8),
           Text(
             '$label : ',

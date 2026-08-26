@@ -63,20 +63,14 @@ class PrepaDetailScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 40),
-                          CircleAvatar(
-                            radius: 28,
-                            backgroundColor: Colors.white24,
-                            child: const Icon(Icons.directions_run, color: Colors.white, size: 28),
-                          ),
-                          const SizedBox(height: 10),
                           Text(
                             state.prepa?.name ?? "Préparation",
-                            style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                            style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            "${dateFormat.format(state.prepa?.startDate ?? DateTime.now())}  →  ${dateFormat.format(state.prepa?.endDate ?? DateTime.now())}",
-                            style: const TextStyle(color: Colors.white70, fontSize: 13),
+                            "${dateFormat.format(state.prepa?.startDate ?? DateTime.now())} - ${dateFormat.format(state.prepa?.endDate ?? DateTime.now())}",
+                            style: const TextStyle(color: Colors.white70, fontSize: 18),
                           ),
                         ],
                       ),

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:running_planning/presentation/bloc/races/races_bloc.dart';
 
-class RacesScreen extends StatefulWidget {
-  const RacesScreen({super.key});
+class RaceListScreen extends StatefulWidget {
+  const RaceListScreen({super.key});
 
   @override
-  State<RacesScreen> createState() => _RacesScreenState();
+  State<RaceListScreen> createState() => _RaceListScreenState();
 }
 
-class _RacesScreenState extends State<RacesScreen> {
+class _RaceListScreenState extends State<RaceListScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -166,23 +166,21 @@ class _RacesScreenState extends State<RacesScreen> {
                                   const Icon(
                                     Icons.location_on,
                                     size: 16,
-                                    color: Colors.grey,
+                                    color: Colors.deepOrangeAccent,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     race.location,
-                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                   const Spacer(),
                                   const Icon(
                                     Icons.calendar_today,
                                     size: 16,
-                                    color: Colors.grey,
+                                    color: Colors.deepOrangeAccent,
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '${race.date.day}/${race.date.month}/${race.date.year}',
-                                    style: const TextStyle(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -192,7 +190,7 @@ class _RacesScreenState extends State<RacesScreen> {
                                   const Icon(
                                     Icons.straighten,
                                     size: 16,
-                                    color: Colors.grey,
+                                    color: Colors.deepOrangeAccent,
                                   ),
                                   const SizedBox(width: 4),
                                   Text('${race.distance} km'),

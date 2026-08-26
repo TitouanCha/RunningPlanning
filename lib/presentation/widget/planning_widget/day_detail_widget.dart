@@ -21,7 +21,7 @@ class DayDetailWidget extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: Colors.deepOrangeAccent,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   padding: EdgeInsets.all(8.0),

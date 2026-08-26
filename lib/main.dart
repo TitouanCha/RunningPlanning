@@ -14,7 +14,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:running_planning/presentation/screen/prepa_detail_screen.dart';
 import 'package:running_planning/presentation/screen/prepa_list_screen.dart';
 import 'package:running_planning/presentation/screen/race_detail_screen.dart';
-import 'package:running_planning/presentation/screen/races_screen.dart';
+import 'package:running_planning/presentation/screen/race_list_screen.dart';
 import 'package:running_planning/presentation/screen/user_race_screen.dart';
 import 'core/nav_enum.dart';
 import 'domain/entities/race.dart';
@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     PrepaListScreen(),
     PlanningScreen(),
-    RacesScreen(),
+    RaceListScreen(),
   ];
 
   @override
