@@ -144,7 +144,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(child: _pages[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (i) => setState(() => _currentIndex = i),
+        onTap: (i) {
+          if (_navItem[i] == NavEnum.planning) {
+            context.read<PlanningBloc>().add(LoadCalendar(date: DateTime.now()));
+          }
+          setState(() => _currentIndex = i);
+        },
         items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(

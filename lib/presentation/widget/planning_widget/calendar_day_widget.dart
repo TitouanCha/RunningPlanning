@@ -79,9 +79,10 @@ class CalendarDayWidget extends StatelessWidget {
                     ),
                   ),
                   child: Container(
+                    padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: isSameDay(selectedDay, calendarDay.day)
-                          ? Colors.white
+                          ? Colors.grey.shade100
                           : Colors.transparent,
                       shape: BoxShape.circle,
                     ),
@@ -89,29 +90,29 @@ class CalendarDayWidget extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if(calendarDay.races.isNotEmpty)
+                        if (calendarDay.races.isNotEmpty)
                           SvgPicture.asset(
-                            "assets/icons/cup.svg"
+                            "assets/icons/cup.svg",
+                            width: 20,
+                            height: 20,
                           )
-                        else Text(calendarDay.day.day.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                        else if (calendarDay.trainings.isNotEmpty)
+                          SvgPicture.asset(
+                            "assets/icons/running-man.svg",
+                            width: 20,
+                            height: 20,
+                          )
+                        else
+                          Text(
+                            calendarDay.day.day.toString(),
+                            style: TextStyle(
+                              //fontWeight: FontWeight.bold,
+                              color: isSameDay(selectedDay, calendarDay.day)
+                                  ? Colors.black
+                                  : Colors.grey.shade800,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (calendarDay.trainings.isNotEmpty)
-                              Container(
-                                width: 6,
-                                height: 6,
-                                decoration: const BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                          ],
-                        ),
                       ],
                     ),
                   ),

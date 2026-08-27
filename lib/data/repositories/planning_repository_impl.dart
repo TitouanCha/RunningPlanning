@@ -24,7 +24,7 @@ class PlanningRepositoryImpl extends PlanningRepository {
       final userToken = await _secureStorage.getToken();
       final Planning planning = await _dataSource.getPlanning(
         startDate,
-        endDate,
+        endDate, 
         userToken,
       );
       return Right(planning);

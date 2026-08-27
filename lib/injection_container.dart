@@ -104,7 +104,7 @@ Future<void> init() async {
 
   //Blocs
   sl.registerLazySingleton(() => AuthBloc(authUseCase: sl()));
-  sl.registerLazySingleton(
+  sl.registerFactory(
     () => PlanningBloc(getPlanningUseCase: sl(), loadCalendarUseCase: sl()),
   );
   sl.registerLazySingleton(
