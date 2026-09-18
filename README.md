@@ -1,4 +1,4 @@
-# Application de suivis d'entrainement pour la course
+# Application de planification d'entraînements pour la course à pied
 
 Application mobile développée avec Flutter permettant de rechercher une course et de suivre un programme d'entraînement adapté afin de préparer son objectif.
 
